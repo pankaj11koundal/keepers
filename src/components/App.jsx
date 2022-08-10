@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
 
 function App() {
+
+  let [listItem, updateItems] = useState([]);
+
+  function addItem(note) {
+    updateItems(prevItems => {
+      return listItem = [...prevItems, note];
+    })
+  }
+
+  function deleteItem(id) {
+    updateItems(listItem.filter((item, i) => {
+      return i !== id;
+    }));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <CreateArea addItem={addItem} />
+      {listItem.map((item, i) => {
+        return <Note
+          title={item.title}
+          content={item.content}
+          key={i}
+          id={i}
+          deleteNote={deleteItem}
+        />
+      })}
+      <Footer />
     </div>
   );
 }
